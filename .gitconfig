@@ -1,0 +1,41 @@
+[user]
+   email = ernesto.garcia@orange.com
+   name = Ernesto Garcia del moral G
+	signingkey = FE6D93425EE4A969
+
+[alias]
+  lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+  lgme = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+  lg = !"git lg1"
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+  d = diff
+  dc = diff --cached
+    
+
+
+[http]
+	sslVerify = false
+[core]
+  excludesfile = /home/ggcr6931/.gitignore
+
+
+[https]
+	sslVerify = false
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
