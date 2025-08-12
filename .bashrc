@@ -284,7 +284,11 @@ fi
 # alias code="/mnt/c/My\ Program\ Files/VSCode-win32-x64-1.98.1/Code.exe > /dev/null 2>&1 &"
 alias code="/mnt/c/Program\ Files/Microsoft\ VS\ Code/Code.exe > /dev/null 2>&1 &"
 
+# terraform
 alias tf=terraform
+
+#terragrunt
+alias tg=terrgrunt
 
 eval "$(starship init bash)"
 

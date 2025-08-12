@@ -39,3 +39,5 @@
 	defaultBranch = main
 [pull]
 	rebase = true
+[safe]
+	directory = /home/egarciad/nomad
