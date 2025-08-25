@@ -191,20 +191,20 @@ alias kbm='kubectl --kubeconfig ~/kubeconfigs/bm-osp-capi-kubeconfig'
 alias kpt=~/bin/kpt_linux_amd64
 
 # kubectl autocomplete
-source <(kubectl completion bash)
-complete -o default -F __start_kubectl k
+command -v kubectl >/dev/null && source <(kubectl completion bash)
+command -v kubectl >/dev/null && complete -o default -F __start_kubectl k
 
 #flux autocomplete
 command -v flux >/dev/null && . <(flux completion bash)
 
 # kubebuilder autocomplete
-source <(kubebuilder completion bash)
+command -v kubebuilder >/dev/null && source <(kubebuilder completion bash)
 
 #operator-sdk completion
-source <(operator-sdk completion bash)
+command -v operator-sdk >/dev/null && source <(operator-sdk completion bash)
 
 #doctl
-source <(doctl completion bash)
+command -v doctl >/dev/null && source <(doctl completion bash)
  
 # Function to checkout and pull main, then rebase branch
 function gcr {
@@ -213,16 +213,16 @@ function gcr {
 }
 
 # clusterctl autocomplete
-source <(clusterctl completion bash)
+command -v clusterctl >/dev/null && source <(clusterctl completion bash)
 
 # sylvactl autocomplete
-source <(sylvactl completion bash)
+command -v sylvactl >/dev/null && source <(sylvactl completion bash)
 
 # etcdctl completion
-source <(etcdctl completion bash)
+command -v etcdctl >/dev/null && source <(etcdctl completion bash)
 
 # kind completion
-. <(kind completion bash)
+command -v kind >/dev/null && source <(kind completion bash)
 
 
 # kops
@@ -236,26 +236,26 @@ source <(etcdctl completion bash)
 #. <(kpt completion bash)
 
 # gh github cli completion
-. <(gh completion -s bash)
+command -v gh >/dev/null && source <(gh completion -s bash)
 
 # clusteradm cli completion
-. <(clusteradm completion bash)
+command -v clusteradm >/dev/null && source <(clusteradm completion bash)
 
 # cilium completion
-. <(cilium completion bash)
+command -v cilium > /dev/null && source <(cilium completion bash)
 
 # containerlab completion
-. <(containerlab completion bash)
-complete -o default -F __start_containerlab cl
+command -v containerlab > /dev/null && source <(containerlab completion bash)
+command -v containerlab >/dev/null && complete -o default -F __start_containerlab cl
 
 # regctl completion
-. <(regctl completion bash)
+command -v regctl > /dev/null && source <(regctl completion bash)
 
 # regsync completion
-. <(regsync completion bash)
+command -v regsync >/dev/null && source <(regsync completion bash)
 
 # velero completion
-. <(velero completion bash)
+command -v velero >/dev/null && source <(velero completion bash)
 
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -288,10 +288,10 @@ alias code="/mnt/c/Program\ Files/Microsoft\ VS\ Code/Code.exe > /dev/null 2>&1 
 alias tf=terraform
 
 #terragrunt
-alias tg=terrgrunt
+alias tg=terragrunt
 
 eval "$(starship init bash)"
 
-complete -C /usr/local/bin/mc mc
+command -v mc > /dev/null && complete -C /usr/local/bin/mc mc
 
-complete -C /usr/bin/terraform terraform
+command -v terraform > /dev/null && complete -C /usr/bin/terraform terraform
