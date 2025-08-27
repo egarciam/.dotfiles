@@ -41,6 +41,7 @@ corkscrew
 .gnupg/
 .iptables/
 .nvm/
+.netrc
 .subversion/
 .tilt-dev/
 .vcluster/
