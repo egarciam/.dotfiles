@@ -55,17 +55,6 @@ fi
 # GPG SIGN commit git commit -S
 export GPG_TTY=$(tty)
 
-export https_proxy=http://10.113.55.34:8080
-#export https_proxy=http://ggcr6931:Garp345604-@10.193.255.99:8080
-export http_proxy=http://10.113.55.34:8080
-#export http_proxy=http://ggcr6931:Garp345604-@10.193.255.99:8080
-export no_proxy=localhost,.cosmos.es.ftgroup,.si.orange.es,0.0.0.0,ingress.local,ingress.local.eth0,ingress.local.ca.tls,10.193.85.0/24,10.193.82.0/24,172.16.0.0/16,192.168.0.0/16,172.18.0.0/16,10.193.58.0/24,kind-registry,quay-cache,docker-cache,172.17.0.0/16 #,10.193.0.0/16
-# export HTTP_PROXY=$http_proxy
-# export HTTPS_PROXY=$https_proxy
-# export NO_PROXY=$no_proxy
-
-
-
 # export OPENFAAS_PREFIX="egmg"
 
 # unset rc
@@ -188,7 +177,7 @@ alias knif='kubectl --kubeconfig=$HOME/kubeconfigs/nif.conf'
 alias kbm='kubectl --kubeconfig ~/kubeconfigs/bm-osp-capi-kubeconfig'
 
 # kpt
-alias kpt=~/bin/kpt_linux_amd64
+command -v kpt >/dev/null && alias kpt=~/bin/kpt_linux_amd64
 
 # kubectl autocomplete
 command -v kubectl >/dev/null && source <(kubectl completion bash)
@@ -281,8 +270,21 @@ else
   echo 'Leyendo claves'
   ssh-add
 fi
-# alias code="/mnt/c/My\ Program\ Files/VSCode-win32-x64-1.98.1/Code.exe > /dev/null 2>&1 &"
-alias code="/mnt/c/Program\ Files/Microsoft\ VS\ Code/Code.exe > /dev/null 2>&1 &"
+
+if [ `uname -n`=="LAPTOP-RKGTBC0K" ]; then
+  alias code="/mnt/c/Users/Ernesto/AppData/Local/Programs/Microsoft VS Code/Code.exe > /dev/null 2>&1 &"
+else
+  # alias code="/mnt/c/My\ Program\ Files/VSCode-win32-x64-1.98.1/Code.exe > /dev/null 2>&1 &"
+  alias code="/mnt/c/Program\ Files/Microsoft\ VS\ Code/Code.exe > /dev/null 2>&1 &"
+  export https_proxy=http://10.113.55.34:8080
+  #export https_proxy=http://ggcr6931:Garp345604-@10.193.255.99:8080
+  export http_proxy=http://10.113.55.34:8080
+  #export http_proxy=http://ggcr6931:Garp345604-@10.193.255.99:8080
+  export no_proxy=localhost,.cosmos.es.ftgroup,.si.orange.es,0.0.0.0,ingress.local,ingress.local.eth0,ingress.local.ca.tls,10.193.85.0/24,10.193.82.0/24,172.16.0.0/16,192.168.0.0/16,172.18.0.0/16,10.193.58.0/24,kind-registry,quay-cache,docker-cache,172.17.0.0/16 #,10.193.0.0/16
+  # export HTTP_PROXY=$http_proxy
+  # export HTTPS_PROXY=$https_proxy
+  # export NO_PROXY=$no_proxy
+fi
 
 # terraform
 alias tf=terraform
