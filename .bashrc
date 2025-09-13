@@ -31,7 +31,7 @@ export PATH="$PATH:/home/egarciad/projects/kubernetes/etcd/bin"
 
 # go
 export GOROOT="/usr/local/go"
-export  PATH="$PATH:$GOROOT/bin"
+export PATH="$PATH:$GOROOT/bin"
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
@@ -73,178 +73,65 @@ fi
 #export KUBECONFIG=~/.kube/config.GRC_PROD
 export KUBECONFIG=~/.kube/kubeconfig
 #export KUBECONFIG=~/.kube/config.localhost
-#alias k=~/projects/kubectl/kubectl
-#alias k='kubectl --kubeconfig=/home/egarciad/.kube/config.GRC_PROD'
-alias k=kubectl
-#alias k='kubectl --kubeconfig=~/.kube/config.localhost'
-# Digital Ocean kubectl
-# kdo
-alias kdo='kubectl --kubeconfig=/home/egarciad/.kube/k8s-1-21-5-do-0-ams3-egmg-project-1-kubeconfig.yaml'
-alias h='KUBECONFIG=/home/egarciad/.kube/k8s-1-21-5-do-0-ams3-egmg-project-1-kubeconfig.yaml helm'
+# Source aliases file
+if [ -f ~/.dotfiles/.bash_aliases ]; then
+    . ~/.dotfiles/.bash_aliases
+fi
 
-# Utilidades para inspeccion de imagenes
-alias dfimage="docker run -v /var/run/docker.sock:/var/run/docker.sock --rm alpine/dfimage"
-alias dive="docker run -ti --rm  -v /var/run/docker.sock:/var/run/docker.sock wagoodman/dive"
 # 
 #export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.fc34.x86_64/jre
 
+# Autocomplete setup for various tools
+_setup_autocompletions() {
+    local commands=(
+        "kubectl:kubectl completion bash"
+        "flux:flux completion bash"
+        "kubebuilder:kubebuilder completion bash"
+        "operator-sdk:operator-sdk completion bash"
+        "doctl:doctl completion bash"
+        "clusterctl:clusterctl completion bash"
+        "sylvactl:sylvactl completion bash"
+        "etcdctl:etcdctl completion bash"
+        "kind:kind completion bash"
+        "gh:gh completion -s bash"
+        "clusteradm:clusteradm completion bash"
+        "cilium:cilium completion bash"
+        "containerlab:containerlab completion bash"
+        "regctl:regctl completion bash"
+        "regsync:regsync completion bash"
+        "velero:velero completion bash"
+        "mc:mc"
+        "terraform:terraform"
+    )
+    
+    for cmd_completion in "${commands[@]}"; do
+        local cmd="${cmd_completion%%:*}"
+        local completion="${cmd_completion#*:}"
+        
+        if command -v "$cmd" >/dev/null 2>&1; then
+            if [[ "$completion" == *" "* ]]; then
+                # For commands that need source <(command)
+                source <($completion) 2>/dev/null
+            else
+                # For commands that need complete -C
+                complete -C "$(command -v $cmd)" "$cmd" 2>/dev/null
+            fi
+        fi
+    done
+    
+    # Special cases for custom aliases
+    command -v kubectl >/dev/null && complete -o default -F __start_kubectl k
+    command -v containerlab >/dev/null && complete -o default -F __start_containerlab cl
+}
 
-# ALIAS para kubectl y los diferentes clusters
-alias ktest='kubectl --kubeconfig=$HOME/kubeconfigs/kube-test-config'
-# kpru cluster clpru1 en lab (nspru vsphere namespace)
-alias kpru='kubectl --kubeconfig=$HOME/kubeconfigs/clpru1-kubeconfig'
-
-#### Diferentes contextos
-# tmc - en PRE
-# tmc-cluster-ns
-# kubectl
-alias ktmc='kubectl --kubeconfig=$HOME/kubeconfigs/tmc-test-cluster-kubeconfig'
-# ktop - Otra consola de kubernetes pero peor que k9s
-# ktop
-alias ktmctop='kubectl-ktop --kubeconfig=$HOME/kubeconfigs/tmc-test-cluster-kubeconfig'
-# k9s
-alias k9stmc='k9s --kubeconfig=$HOME/kubeconfigs/tmc-test-cluster-kubeconfig'
-
-# LAB
-# CONTEXT: cloud-test  vsphere namespace
-# kubectl
-alias klab='kubectl --kubeconfig=$HOME/kubeconfigs/cloud-test-pod-cidr-alloc-kubeconfig'
-# k9s
-alias k9slab='k9s --kubeconfig=$HOME/kubeconfigs/cloud-test-pod-cidr-alloc-kubeconfig'
-# ktop - Otra consola de kubernetes pero peor que k9s
-alias klabtop='kubectl-ktop --kubeconfig=$HOME/kubeconfigs/cloud-test-cluster-1-kubeconfig'
-
-# PRE
-# CONTEXT mxfuw-iam99-admin@mxfuw-iam99 (NOKIA)
-# kubectl
-alias kpre='kubectl --kubeconfig=$HOME/kubeconfigs/mxfuw-iam99-kubeconfig'
-# k9s
-alias k9spre='k9s --kubeconfig=$HOME/kubeconfigs/mxfuw-iam99-kubeconfig'
-
-# NIAM
-# CONTEXT mxfuw-iam99-admin@mxfuw-iam99 (NOKIA) namespace netguard-admin-ns
-# kubectl
-alias kniam='kubectl --kubeconfig=$HOME/kubeconfigs/mxfuw-iam99-kubeconfig -n netguard-admin-ns'
-# k9s
-alias k9sniam='k9s --kubeconfig=$HOME/kubeconfigs/mxfuw-iam99-kubeconfig -n netguard-admin-ns'
-
-# NIAM
-# CONTEXT mxulw
-# ULISES PRODUCCION
-alias kul='kubectl --kubeconfig $HOME/kubeconfigs/mxulw-iam01-kubeconfig'
-# k9s
-alias k9sul='k9s --kubeconfig $HOME/kubeconfigs/mxulw-iam01-kubeconfig'
-
-# NIAM
-# CONTEXT mxfuw
-# COSLADA PRODUCCION 
-alias kcol='kubectl --kubeconfig $HOME/kubeconfigs/mxfuw-iam01-kubeconfig'
-# k9s
-alias k9scol='k9s --kubeconfig $HOME/kubeconfigs/mxfuw-iam01-kubeconfig'
-
-
-# DO
-# # 
-alias kdo='kubectl --kubeconfig $HOME/.kube/kube-config-control-plane'
-# k9s
-alias k9sdo='k9s --kubeconfig=$HOME/.kube/kube-config-control-plane'
-
-# TKNG THE KUBERNETES NETWORKING GUIDE
-# #
-alias ktk='kubectl --context kind-k8s-guide --kubeconfig ~/.kube/kubeconfig'
-alias k9stk='k9s --kubeconfig ~/.kube/kubeconfig'
-
-# SYLVA CLUSTER ON PC
-# 
-alias ks='kubectl --kubeconfig=$HOME/kubeconfigs/sylva-kubeconfig'
-alias k9sylva='k9s --kubeconfig ~/kubeconfigs/sylva-kubeconfig'
-
-# Servidor para montar un repositorio de charts de helm
-# chartmuseusm
-alias cm=chartmuseum
-
-# OTC CAAS PRE
-alias kcas='k --kubeconfig ~/kubeconfigs/otc-caas-management-cluster-kubeconfig'
-# OTC CAAS PRE WKLOAD
-alias kcasw='k --kubeconfig ~/kubeconfigs/otc-caas-workload-cluster-kubeconfig'
-
-
-# NIF KUBELOGIN
-alias knif='kubectl --kubeconfig=$HOME/kubeconfigs/nif.conf'
-# alias knif='kubectl --kubeconfig=$HOME/kubeconfigs/nif-tz/workload-cluster-kubeconfig'
-#
-# OTC-CAAS PRE WORKLOAD CLUSTER
-alias kbm='kubectl --kubeconfig ~/kubeconfigs/bm-osp-capi-kubeconfig'
-
-# kpt
-command -v kpt >/dev/null && alias kpt=~/bin/kpt_linux_amd64
-
-# kubectl autocomplete
-command -v kubectl >/dev/null && source <(kubectl completion bash)
-command -v kubectl >/dev/null && complete -o default -F __start_kubectl k
-
-#flux autocomplete
-command -v flux >/dev/null && . <(flux completion bash)
-
-# kubebuilder autocomplete
-command -v kubebuilder >/dev/null && source <(kubebuilder completion bash)
-
-#operator-sdk completion
-command -v operator-sdk >/dev/null && source <(operator-sdk completion bash)
-
-#doctl
-command -v doctl >/dev/null && source <(doctl completion bash)
+# Run autocomplete setup
+_setup_autocompletions
  
 # Function to checkout and pull main, then rebase branch
 function gcr {
   git checkout main && git branch -D $1;
   git pull && git checkout $1 && git rebase main
 }
-
-# clusterctl autocomplete
-command -v clusterctl >/dev/null && source <(clusterctl completion bash)
-
-# sylvactl autocomplete
-command -v sylvactl >/dev/null && source <(sylvactl completion bash)
-
-# etcdctl completion
-command -v etcdctl >/dev/null && source <(etcdctl completion bash)
-
-# kind completion
-command -v kind >/dev/null && source <(kind completion bash)
-
-
-# kops
-#. <(kops completion bash)
-
-# tkn completion
-# . <(tkn completion bash)
-
-# kpt completion
-#. <(kpt_linux_amd64 completion bash)
-#. <(kpt completion bash)
-
-# gh github cli completion
-command -v gh >/dev/null && source <(gh completion -s bash)
-
-# clusteradm cli completion
-command -v clusteradm >/dev/null && source <(clusteradm completion bash)
-
-# cilium completion
-command -v cilium > /dev/null && source <(cilium completion bash)
-
-# containerlab completion
-command -v containerlab > /dev/null && source <(containerlab completion bash)
-command -v containerlab >/dev/null && complete -o default -F __start_containerlab cl
-
-# regctl completion
-command -v regctl > /dev/null && source <(regctl completion bash)
-
-# regsync completion
-command -v regsync >/dev/null && source <(regsync completion bash)
-
-# velero completion
-command -v velero >/dev/null && source <(velero completion bash)
 
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -271,19 +158,10 @@ else
   ssh-add
 fi
 
-if [ `uname -n`=="LAPTOP-RKGTBC0K" ]; then
-  alias code="/mnt/c/Users/Ernesto/AppData/Local/Programs/Microsoft VS Code/Code.exe > /dev/null 2>&1 &"
-else
-  # alias code="/mnt/c/My\ Program\ Files/VSCode-win32-x64-1.98.1/Code.exe > /dev/null 2>&1 &"
-  alias code="/mnt/c/Program\ Files/Microsoft\ VS\ Code/Code.exe > /dev/null 2>&1 &"
+if [[ `uname -n` != "LAPTOP-RKGTBC0K" ]]; then
   export https_proxy=http://10.113.55.34:8080
-  #export https_proxy=http://ggcr6931:Garp345604-@10.193.255.99:8080
   export http_proxy=http://10.113.55.34:8080
-  #export http_proxy=http://ggcr6931:Garp345604-@10.193.255.99:8080
   export no_proxy=localhost,.cosmos.es.ftgroup,.si.orange.es,0.0.0.0,ingress.local,ingress.local.eth0,ingress.local.ca.tls,10.193.85.0/24,10.193.82.0/24,172.16.0.0/16,192.168.0.0/16,172.18.0.0/16,10.193.58.0/24,kind-registry,quay-cache,docker-cache,172.17.0.0/16 #,10.193.0.0/16
-  # export HTTP_PROXY=$http_proxy
-  # export HTTPS_PROXY=$https_proxy
-  # export NO_PROXY=$no_proxy
 fi
 
 # terraform
@@ -294,6 +172,24 @@ alias tg=terragrunt
 
 eval "$(starship init bash)"
 
-command -v mc > /dev/null && complete -C /usr/local/bin/mc mc
-
-command -v terraform > /dev/null && complete -C /usr/bin/terraform terraform
+# Source machine-specific configuration
+if [ -f ~/.dotfiles/.machine_config ]; then
+    . ~/.dotfiles/.machine_config
+fi
+          "$vscode_path" "$@" > /dev/null 2>&1 &
+      else
+          echo "Error: VS Code not found at $vscode_path" >&2
+          return 1
+      fi
+  }
+else
+  code() {
+      local vscode_path="/mnt/c/Program Files/Microsoft VS Code/Code.exe"
+      if [[ -f "$vscode_path" ]]; then
+          "$vscode_path" "$@" > /dev/null 2>&1 &
+      else
+          echo "Error: VS Code not found at $vscode_path" >&2
+          return 1
+      fi
+  }
+fi

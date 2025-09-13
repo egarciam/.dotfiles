@@ -1,0 +1,34 @@
+# Machine-specific configuration
+
+# Get the current machine hostname
+MACHINE_NAME="$(uname -n)"
+
+# Machine-specific configurations
+case "$MACHINE_NAME" in
+    "LAPTOP-RKGTBC0K")
+        # VS Code path for this machine
+        VSCODE_PATH="/mnt/c/Users/Ernesto/AppData/Local/Programs/Microsoft VS Code/Code.exe"
+        
+        # No proxy needed for this machine
+        unset https_proxy http_proxy no_proxy
+        ;;
+    *)
+        # VS Code path for other machines
+        VSCODE_PATH="/mnt/c/Program Files/Microsoft VS Code/Code.exe"
+        
+        # Proxy settings for corporate machines
+        export https_proxy=http://10.113.55.34:8080
+        export http_proxy=http://10.113.55.34:8080
+        export no_proxy=localhost,.cosmos.es.ftgroup,.si.orange.es,0.0.0.0,ingress.local,ingress.local.eth0,ingress.local.ca.tls,10.193.85.0/24,10.193.82.0/24,172.16.0.0/16,192.168.0.0/16,172.18.0.0/16,10.193.58.0/24,kind-registry,quay-cache,docker-cache,172.17.0.0/16
+        ;;
+esac
+
+# VS Code function using the machine-specific path
+code() {
+    if [[ -f "$VSCODE_PATH" ]]; then
+        "$VSCODE_PATH" "$@" > /dev/null 2>&1 &
+    else
+        echo "Error: VS Code not found at $VSCODE_PATH" >&2
+        return 1
+    fi
+}
