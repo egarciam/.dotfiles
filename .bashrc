@@ -26,7 +26,7 @@ export PATH="$PATH:/home/egarciad/istio-1.20.2/bin"
 # linuxbrew
 export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
-# ectd
+# etcd
 export PATH="$PATH:/home/egarciad/projects/kubernetes/etcd/bin"
 
 # go
@@ -47,17 +47,9 @@ if [ -d ~/.bashrc.d ]; then
 	done
 fi
 
-# exesudo
-# if [ -f ~/.exesudo ]; then
-# . .exesudo
-# fi
 
 # GPG SIGN commit git commit -S
 export GPG_TTY=$(tty)
-
-# export OPENFAAS_PREFIX="egmg"
-
-# unset rc
 
 if [[ -z "$XDG_RUNTIME_DIR" ]]; then
   export XDG_RUNTIME_DIR=/run/user/$UID
@@ -69,10 +61,8 @@ if [[ -z "$XDG_RUNTIME_DIR" ]]; then
   fi
 fi
 
-#export KUBECONFIG=~/.kube/config.GRC_PROD;~/.kube/config.localhost
-#export KUBECONFIG=~/.kube/config.GRC_PROD
 export KUBECONFIG=~/.kube/kubeconfig
-#export KUBECONFIG=~/.kube/config.localhost
+
 # Source aliases file
 if [ -f ~/.dotfiles/.bash_aliases ]; then
     . ~/.dotfiles/.bash_aliases
@@ -80,6 +70,11 @@ fi
 
 # 
 #export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.312.b07-2.fc34.x86_64/jre
+
+# Source machine-specific configuration
+if [ -f ~/.dotfiles/.machine_config ]; then
+    . ~/.dotfiles/.machine_config
+fi
 
 # Autocomplete setup for various tools
 _setup_autocompletions() {
@@ -158,38 +153,6 @@ else
   ssh-add
 fi
 
-if [[ `uname -n` != "LAPTOP-RKGTBC0K" ]]; then
-  export https_proxy=http://10.113.55.34:8080
-  export http_proxy=http://10.113.55.34:8080
-  export no_proxy=localhost,.cosmos.es.ftgroup,.si.orange.es,0.0.0.0,ingress.local,ingress.local.eth0,ingress.local.ca.tls,10.193.85.0/24,10.193.82.0/24,172.16.0.0/16,192.168.0.0/16,172.18.0.0/16,10.193.58.0/24,kind-registry,quay-cache,docker-cache,172.17.0.0/16 #,10.193.0.0/16
-fi
-
-# terraform
-alias tf=terraform
-
-#terragrunt
-alias tg=terragrunt
-
 eval "$(starship init bash)"
 
-# Source machine-specific configuration
-if [ -f ~/.dotfiles/.machine_config ]; then
-    . ~/.dotfiles/.machine_config
-fi
-          "$vscode_path" "$@" > /dev/null 2>&1 &
-      else
-          echo "Error: VS Code not found at $vscode_path" >&2
-          return 1
-      fi
-  }
-else
-  code() {
-      local vscode_path="/mnt/c/Program Files/Microsoft VS Code/Code.exe"
-      if [[ -f "$vscode_path" ]]; then
-          "$vscode_path" "$@" > /dev/null 2>&1 &
-      else
-          echo "Error: VS Code not found at $vscode_path" >&2
-          return 1
-      fi
-  }
-fi
+

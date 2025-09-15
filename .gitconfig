@@ -41,3 +41,5 @@
 	rebase = true
 [safe]
 	directory = /home/egarciad/nomad
+[include]
+	path = /home/yayito/.dotfiles/.gitconfig_global

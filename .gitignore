@@ -1,8 +1,14 @@
-!~/kubeconfigs/*
+# Start by ignoring everything
 *
+
+# Allow dotfiles and directories
 !.*
 !.*/**
+
+# But ignore content of dotfile directories (override above)
 .*/**/
+
+# Directories to ignore
 projects/
 .kube/**/**
 .gvm/
@@ -17,33 +23,40 @@ projects/
 .groovy/**
 .ansible/**
 .cluster-api/**
-.bash_history
-.ssh/config
-.ssh-manager/*
 .terraform.d
-.ssh/*
-!.ssh/config
-!scripts/
-!scripts/**
-corkscrew
+.ssh-manager/*
 .sonobuoy
 .sts4
-!*.sh
-!~/kubeconfigs/*
-.viminfo
-.wget-hsts
-.config/QtProject.conf
-.bash_history
-.bash_logout
-.lesshst
-.Xauthority
 .fontconfig/
 .gnupg/
 .iptables/
 .nvm/
-.netrc
 .subversion/
 .tilt-dev/
 .vcluster/
-dev-tmux.sh
+
+# Specific files to ignore
+.bash_history
+.bash_logout
+.viminfo
+.wget-hsts
+.lesshst
+.Xauthority
+.netrc
 .ansible-console_history
+.config/QtProject.conf
+corkscrew
+
+# Allow specific patterns
+!*.sh
+!scripts/
+!scripts/**
+!.ssh/config
+!~/kubeconfigs/*
+
+# SSH directory (ignore all except config)
+.ssh/*
+!.ssh/config
+
+# Development script
+dev-tmux.sh
