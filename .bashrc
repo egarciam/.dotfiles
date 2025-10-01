@@ -162,3 +162,6 @@ if [ -f '/home/yayito/google-cloud-sdk/path.bash.inc' ]; then . '/home/yayito/go
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/yayito/google-cloud-sdk/completion.bash.inc' ]; then . '/home/yayito/google-cloud-sdk/completion.bash.inc'; fi
+
+# add Pulumi to the PATH
+export PATH=$PATH:/home/egarciad/.pulumi/bin
